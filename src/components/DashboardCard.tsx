@@ -122,7 +122,7 @@ export default function DashboardCard({ title, value, change, changeType, icon, 
       transition-all 
       duration-300 
       ${getAccentColor()}
-      ${isVisible ? 'animate-float' : ''}
+
     `}>
       {/* Header */}
       <div className="flex items-center justify-between mb-3">

@@ -87,8 +87,8 @@ export default function ValeriaAI() {
               
               {/* Background effects */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary-cyan/5 via-transparent to-success-green/5" />
-              <div className="absolute top-0 right-0 w-96 h-96 bg-primary-cyan/3 rounded-full blur-3xl animate-float" />
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-success-green/3 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+              <div className="absolute top-0 right-0 w-96 h-96 bg-primary-cyan/3 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-success-green/3 rounded-full blur-3xl" />
               
               <div className="relative z-10 p-8 lg:p-12">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-8">

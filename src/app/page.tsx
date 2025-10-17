@@ -5,7 +5,7 @@ import Sidebar from '@/components/Sidebar'
 import DashboardCard from '@/components/DashboardCard'
 import Chart from '@/components/Chart'
 import SimpleBarChart from '@/components/SimpleBarChart'
-import SupabaseConfigWarning from '@/components/SupabaseConfigWarning'
+
 import { CursorArrowRaysIcon, ChartBarIcon, ArrowTrendingUpIcon, SparklesIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { getAttendedBySector, getVendasAtacadoKpis, getNewLeadsKpis } from '@/lib/queries'
 
@@ -183,8 +183,7 @@ export default function Dashboard() {
         <main className="flex-1 p-6 lg:p-8 xl:p-12">
           <div className="w-full max-w-7xl mx-auto space-y-8">
             
-            {/* Aviso de Configuração do Supabase */}
-            <SupabaseConfigWarning />
+
             
             {/* Loading indicator */}
             {loading && (
@@ -208,8 +207,8 @@ export default function Dashboard() {
               
               {/* Background effects - Responsive sizes */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary-cyan/5 via-transparent to-success-green/5" />
-              <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 bg-primary-cyan/3 rounded-full blur-3xl animate-float" />
-              <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-96 lg:h-96 bg-success-green/3 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }} />
+              <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 bg-primary-cyan/3 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-96 lg:h-96 bg-success-green/3 rounded-full blur-3xl" />
               
               <div className="relative z-10 p-4 sm:p-6 lg:p-8 xl:p-12">
                 <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 sm:gap-6 lg:gap-8">
@@ -227,7 +226,7 @@ export default function Dashboard() {
                     </div>
                     
                     {/* Glow effect */}
-                    <div className="absolute inset-0 rounded-xl lg:rounded-2xl bg-gradient-premium blur-xl opacity-50 animate-glow-pulse" />
+                    <div className="absolute inset-0 rounded-xl lg:rounded-2xl bg-gradient-premium blur-xl opacity-50" />
                   </div>
                   
                   {/* Content - Enhanced responsive typography */}
