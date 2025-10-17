@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.2.0",
     "@supabase/supabase-js": "^2.75.0",
     "autoprefixer": "^10.4.21",
+    "dotenv": "^17.2.3",
     "next": "15.5.5",
     "react": "^18",
     "react-dom": "^18"

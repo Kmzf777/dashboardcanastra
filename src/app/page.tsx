@@ -5,6 +5,7 @@ import Sidebar from '@/components/Sidebar'
 import DashboardCard from '@/components/DashboardCard'
 import Chart from '@/components/Chart'
 import SimpleBarChart from '@/components/SimpleBarChart'
+import SupabaseConfigWarning from '@/components/SupabaseConfigWarning'
 import { CursorArrowRaysIcon, ChartBarIcon, ArrowTrendingUpIcon, SparklesIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { getAttendedBySector, getVendasAtacadoKpis, getNewLeadsKpis } from '@/lib/queries'
 
@@ -181,6 +182,9 @@ export default function Dashboard() {
         <Sidebar />
         <main className="flex-1 p-6 lg:p-8 xl:p-12">
           <div className="w-full max-w-7xl mx-auto space-y-8">
+            
+            {/* Aviso de Configuração do Supabase */}
+            <SupabaseConfigWarning />
             
             {/* Loading indicator */}
             {loading && (
