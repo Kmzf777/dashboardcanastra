@@ -1,4 +1,4 @@
-import supabase from '@/lib/supabaseClient'
+import supabase, { isSupabaseConfigured, getSupabaseConfigError } from '@/lib/supabaseClient'
 
 const START_DATE_ISO = '2025-10-01T00:00:00.000Z'
 
@@ -70,6 +70,11 @@ export const sectorMap: Record<number, SectorKey> = {
 }
 
 export async function fetchLeadsGoogleRaw() {
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase não configurado, retornando dados vazios:', getSupabaseConfigError())
+    return []
+  }
+  
   const { data, error } = await supabase
     .from('leads-google')
     .select('*')
@@ -134,6 +139,11 @@ function normalizeUF(input: string | null | undefined): string | null {
 }
 
 export async function fetchAtacadoRaw() {
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase não configurado, retornando dados vazios:', getSupabaseConfigError())
+    return []
+  }
+  
   const { data, error } = await supabase
     .from('leads-closer-atacado')
     .select('*')
@@ -156,6 +166,11 @@ export async function getClientsByState() {
 
 // --- Vendas Atacado (Marcos) ---
 export async function fetchVendasAtacadoRaw() {
+  if (!isSupabaseConfigured()) {
+    console.warn('Supabase não configurado, retornando dados vazios:', getSupabaseConfigError())
+    return []
+  }
+  
   const { data, error } = await supabase
     .from('vendas_atacado')
     .select('*')
