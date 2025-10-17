@@ -21,7 +21,7 @@ export default function SimpleBarChart({ items, max }: { items: Item[]; max?: nu
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 min-w-0 max-w-full overflow-hidden">
       {items.map((item, idx) => {
         const pct = Math.round((item.value / maxValue) * 100)
         const isHovered = hoveredIndex === idx
@@ -30,7 +30,7 @@ export default function SimpleBarChart({ items, max }: { items: Item[]; max?: nu
         return (
           <div 
             key={idx}
-            className="group cursor-pointer"
+            className="group cursor-pointer min-w-0"
             onMouseEnter={() => setHoveredIndex(idx)}
             onMouseLeave={() => setHoveredIndex(null)}
           >

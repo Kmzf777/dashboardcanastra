@@ -114,22 +114,22 @@ export default function DashboardCard({ title, value, change, changeType, icon, 
   return (
     <div className={`
       premium-card 
-      min-w-[240px] 
-      h-[140px] 
+      relative overflow-hidden min-w-0 w-full
+      min-h-[120px] sm:min-h-[140px] lg:min-h-[160px]
       group 
       hover:scale-[1.02] 
       hover:shadow-2xl 
       transition-all 
       duration-300 
       ${getAccentColor()}
-
+      p-3 sm:p-4 lg:p-6
     `}>
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between mb-2 sm:mb-3">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {IconComp && (
-            <div className="w-6 h-6 rounded-lg bg-primary-cyan/10 flex items-center justify-center">
-              <IconComp className="w-4 h-4 text-primary-cyan" />
+            <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-primary-cyan/10 flex items-center justify-center">
+              <IconComp className="w-3 h-3 sm:w-4 sm:h-4 text-primary-cyan" />
             </div>
           )}
           {period && (
@@ -141,27 +141,28 @@ export default function DashboardCard({ title, value, change, changeType, icon, 
       </div>
 
       {/* Title */}
-      <h3 className="text-sm font-medium text-text-secondary mb-2 truncate">
+      <h3 className="text-xs sm:text-sm font-medium text-text-secondary mb-1.5 sm:mb-2 truncate">
         {title}
       </h3>
 
       {/* Value with gradient effect */}
-      <div className="mb-3">
-        <div className="text-4xl font-bold font-mono bg-gradient-to-r from-primary-cyan to-white bg-clip-text text-transparent leading-none">
+      <div className="mb-2 sm:mb-3 flex-1 flex items-center min-w-0">
+        <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold font-mono bg-gradient-to-r from-primary-cyan to-white bg-clip-text text-transparent leading-none truncate overflow-hidden whitespace-nowrap">
           {formatAnimatedValue(animatedValue)}
         </div>
       </div>
 
       {/* Trend indicator */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5 sm:gap-2 mt-auto">
         <div className={`
-          inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border
+          inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full text-xs font-medium border
           ${getTrendColor()}
         `}>
           {getTrendIcon()}
-          {change}
+          <span className="hidden sm:inline">{change}</span>
+          <span className="sm:hidden">{change.replace('%', '')}</span>
         </div>
-        <span className="text-xs text-text-tertiary">vs ontem</span>
+        <span className="text-xs text-text-tertiary hidden sm:inline">vs ontem</span>
       </div>
 
       {/* Hover glow effect */}

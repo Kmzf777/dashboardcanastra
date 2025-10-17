@@ -128,32 +128,20 @@ body {
 
   /* Sidebar Premium */
   .sidebar-premium {
-    width: 72px;
+    width: 16rem; /* 256px, consistente com w-64 */
     background: var(--glass-bg);
     backdrop-filter: blur(20px) saturate(180%);
     border-right: 1px solid var(--glass-border);
-    transition: width var(--transition);
-    position: relative;
   }
 
-  .sidebar-premium:hover {
-    width: 240px;
-  }
-
+  /* Labels sempre visíveis e estáveis */
   .menu-label {
-    opacity: 0;
-    width: 0;
-    margin-left: 0;
-    overflow: hidden;
-    transition: opacity var(--transition), width var(--transition), margin var(--transition);
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
-
-  .sidebar-premium:hover .menu-label {
     opacity: 1;
     width: auto;
     margin-left: 12px;
+    overflow: hidden;
+    color: var(--text-secondary);
+    white-space: nowrap;
   }
 
   /* Typography System */

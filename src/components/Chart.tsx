@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 interface ChartProps {
   title: string
@@ -10,9 +10,25 @@ interface ChartProps {
 
 export default function Chart({ title, data, type = 'leads' }: ChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [screenWidth, setScreenWidth] = useState(1024) // Default to desktop
   
   const computedMax = Math.max(...data.map(item => item.value))
   const maxValue = Math.max(1, computedMax)
+
+  useEffect(() => {
+    const updateScreenWidth = () => {
+      setScreenWidth(window.innerWidth)
+    }
+    
+    // Set initial width
+    updateScreenWidth()
+    
+    // Add event listener
+    window.addEventListener('resize', updateScreenWidth)
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', updateScreenWidth)
+  }, [])
 
   const getBarColor = (index: number, isHovered: boolean) => {
     const baseColors = {
@@ -38,15 +54,16 @@ export default function Chart({ title, data, type = 'leads' }: ChartProps) {
   }
 
   return (
-    <div className="premium-card p-8 border border-white/8">
+    <div className="premium-card overflow-hidden min-w-0 p-4 sm:p-6 lg:p-8 border border-white/8">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-text-primary">{title}</h3>
-        <div className="flex items-center gap-3">
-          <div className="text-sm text-text-tertiary">
-            Máx: <span className="font-mono font-semibold text-text-secondary">{formatValue(computedMax)}</span>
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <h3 className="text-lg sm:text-xl font-semibold text-text-primary truncate">{title}</h3>
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="text-xs sm:text-sm text-text-tertiary">
+            <span className="hidden sm:inline">Máx: </span>
+            <span className="font-mono font-semibold text-text-secondary">{formatValue(computedMax)}</span>
           </div>
-          <div className={`w-3 h-3 rounded-full ${type === 'leads' ? 'bg-primary-cyan' : 'bg-success-green'}`} />
+          <div className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full ${type === 'leads' ? 'bg-primary-cyan' : 'bg-success-green'}`} />
         </div>
       </div>
 
@@ -60,24 +77,25 @@ export default function Chart({ title, data, type = 'leads' }: ChartProps) {
         </div>
 
         {/* Chart */}
-        <div className="relative h-[200px] w-full flex items-end justify-between gap-2 px-2">
+        <div className="relative h-[150px] sm:h-[180px] lg:h-[200px] w-full flex items-end justify-between gap-1 sm:gap-2 px-1 sm:px-2">
           {data.map((item, index) => {
-            const height = Math.max(8, Math.round((item.value / maxValue) * 180))
+            const chartHeight = screenWidth < 640 ? 130 : screenWidth < 1024 ? 160 : 180
+            const height = Math.max(6, Math.round((item.value / maxValue) * chartHeight))
             const isHovered = hoveredIndex === index
             
             return (
               <div 
                 key={index} 
-                className="flex flex-col items-center flex-1 group cursor-pointer"
+                className="flex flex-col items-center flex-1 basis-0 min-w-0 group cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
               >
                 {/* Value Tooltip */}
                 <div className={`
-                  absolute -top-12 left-1/2 transform -translate-x-1/2 
-                  px-3 py-1 rounded-lg bg-surface-elevated border border-white/10
+                  absolute -top-10 sm:-top-12 left-1/2 transform -translate-x-1/2 
+                  px-2 sm:px-3 py-1 rounded-lg bg-surface-elevated border border-white/10
                   text-xs font-mono font-semibold text-text-primary
-                  transition-all duration-200 pointer-events-none
+                  transition-all duration-200 pointer-events-none z-10
                   ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
                 `}>
                   {formatValue(item.value)}
@@ -85,7 +103,7 @@ export default function Chart({ title, data, type = 'leads' }: ChartProps) {
                 </div>
 
                 {/* Bar */}
-                <div className="w-full max-w-[32px] bg-surface-elevated rounded-t-lg overflow-hidden flex items-end relative">
+                <div className="w-full max-w-[20px] sm:max-w-[28px] lg:max-w-[32px] bg-surface-elevated rounded-t-lg overflow-hidden flex items-end relative">
                   <div
                     className={`
                       w-full rounded-t-lg transition-all duration-500 ease-out
@@ -122,7 +140,8 @@ export default function Chart({ title, data, type = 'leads' }: ChartProps) {
                 ${hoveredIndex === index ? 'text-text-primary' : 'text-text-tertiary'}
               `}
             >
-              {item.label}
+              <span className="hidden sm:inline">{item.label}</span>
+              <span className="sm:hidden">{item.label.slice(0, 3)}</span>
             </div>
           ))}
         </div>

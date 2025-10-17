@@ -1,9 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ClockIcon, ChartBarIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline'
+import { ClockIcon, ChartBarIcon, ArrowTrendingUpIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 
-export default function Header() {
+interface HeaderProps {
+  onMobileMenuToggle?: () => void
+  isMobileMenuOpen?: boolean
+}
+
+export default function Header({ onMobileMenuToggle, isMobileMenuOpen = false }: HeaderProps) {
   const [currentTime, setCurrentTime] = useState(new Date())
   const [scrollY, setScrollY] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
@@ -46,7 +51,7 @@ export default function Header() {
 
   return (
     <header 
-      className="sticky top-0 z-50 h-14 sm:h-16 glass border-b border-border-subtle transition-all duration-300"
+      className="fixed top-0 left-0 lg:left-64 right-0 z-40 h-14 sm:h-16 glass border-b border-border-subtle transition-all duration-300"
       style={{
         backdropFilter: `blur(${Math.min(scrollY / 10 + 12, 20)}px)`,
         backgroundColor: `rgba(15, 23, 42, ${Math.min(scrollY / 100 + 0.8, 0.95)})`
@@ -59,11 +64,24 @@ export default function Header() {
       />
       
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center justify-between relative z-10">
-        {/* Left side - Quick metrics summary with responsive design */}
+        {/* Left side - Mobile menu button and metrics */}
         <div className={`
           flex items-center space-x-3 sm:space-x-6 transition-all duration-700 ease-out
           ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-8 opacity-0'}
         `}>
+          {/* Mobile menu button */}
+          <button
+            onClick={onMobileMenuToggle}
+            className="lg:hidden p-2 rounded-lg bg-surface-elevated/50 backdrop-blur-sm border border-border-subtle hover:bg-surface-hover hover:border-primary-cyan/30 transition-all duration-200 group"
+            aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+          >
+            {isMobileMenuOpen ? (
+              <XMarkIcon className="w-5 h-5 text-text-primary group-hover:text-primary-cyan transition-colors" />
+            ) : (
+              <Bars3Icon className="w-5 h-5 text-text-primary group-hover:text-primary-cyan transition-colors" />
+            )}
+          </button>
+
           {/* Desktop metrics - hidden on mobile */}
           <div className="hidden md:flex items-center space-x-6">
             <div 
@@ -85,7 +103,7 @@ export default function Header() {
           </div>
           
           {/* Mobile/Tablet compact metrics */}
-          <div className="md:hidden flex items-center space-x-3">
+          <div className="md:hidden lg:flex items-center space-x-3">
             <div 
               className="flex items-center space-x-1.5 group cursor-pointer transition-all duration-200 hover:scale-105"
               style={{ transitionDelay: '100ms' }}

@@ -11,6 +11,7 @@ export default function MarcosAI() {
   const [vendasKpis, setVendasKpis] = useState({ todayTotal: 0, last7Total: 0, last15Total: 0, last30Total: 0 })
   const [clientsByState, setClientsByState] = useState({})
   const [loading, setLoading] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   useEffect(() => {
     setIsVisible(true)
@@ -48,15 +49,21 @@ export default function MarcosAI() {
   
   return (
     <div className="min-h-screen bg-background-base">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6 lg:p-8 xl:p-12">
+      <Header 
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        isMobileMenuOpen={isMobileMenuOpen}
+      />
+      <div className="relative min-w-0 lg:pl-64">
+        <Sidebar 
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+        />
+        <main className="flex-1 min-w-0 pt-16 px-3 sm:px-4 lg:px-8 xl:px-12 transition-all duration-300 overflow-x-hidden">
           <div className="w-full max-w-7xl mx-auto space-y-8">
             
             {/* Premium AI Agent Hero Card */}
             <div className={`
-              ai-agent-card group relative overflow-hidden
+              ai-agent-card group relative overflow-hidden min-w-0
               transition-all duration-700 ease-out
               ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
             `}>

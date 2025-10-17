@@ -4,7 +4,6 @@ import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
 import DashboardCard from '@/components/DashboardCard'
 import Chart from '@/components/Chart'
-import SimpleBarChart from '@/components/SimpleBarChart'
 
 import { CursorArrowRaysIcon, ChartBarIcon, ArrowTrendingUpIcon, SparklesIcon, Cog6ToothIcon } from '@heroicons/react/24/outline'
 import { getAttendedBySector, getVendasAtacadoKpis, getNewLeadsKpis } from '@/lib/queries'
@@ -16,6 +15,7 @@ export default function Dashboard() {
   const [vendasKpis, setVendasKpis] = useState({ todayTotal: 0, last7Total: 0, last15Total: 0, last30Total: 0 })
   const [leadsKpis, setLeadsKpis] = useState({ today: 0, last7: 0, last15: 0, last30: 0 })
   const [loading, setLoading] = useState(true)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   
   useEffect(() => {
     setIsVisible(true)
@@ -177,10 +177,17 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background-base">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6 lg:p-8 xl:p-12">
+      <Header 
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        isMobileMenuOpen={isMobileMenuOpen}
+      />
+      <div className="relative min-w-0 lg:pl-64">
+        <Sidebar 
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+        />
+
+        <main className="flex-1 min-w-0 pt-16 px-3 sm:px-4 lg:px-8 xl:px-12 transition-all duration-300 overflow-x-hidden">
           <div className="w-full max-w-7xl mx-auto space-y-8">
             
 
@@ -197,59 +204,59 @@ export default function Dashboard() {
             
             {/* Premium Dashboard Hero Section - Enhanced Responsive */}
             <div className={`
-              premium-card group relative overflow-hidden
+              premium-card group relative overflow-hidden min-w-0 mb-6 sm:mb-8 lg:mb-12
               transition-all duration-700 ease-out
               ${animationStage >= 1 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
             `}>
               {/* Animated gradient border */}
-              <div className="absolute inset-0 bg-gradient-premium rounded-xl lg:rounded-2xl opacity-75 blur-sm group-hover:opacity-100 transition-opacity duration-300" />
-              <div className="absolute inset-[1px] bg-surface-elevated rounded-xl lg:rounded-2xl" />
+              <div className="absolute inset-0 bg-gradient-premium rounded-lg sm:rounded-xl lg:rounded-2xl opacity-75 blur-sm group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-[1px] bg-surface-elevated rounded-lg sm:rounded-xl lg:rounded-2xl" />
               
               {/* Background effects - Responsive sizes */}
               <div className="absolute inset-0 bg-gradient-to-br from-primary-cyan/5 via-transparent to-success-green/5" />
-              <div className="absolute top-0 right-0 w-48 h-48 sm:w-64 sm:h-64 lg:w-96 lg:h-96 bg-primary-cyan/3 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-96 lg:h-96 bg-success-green/3 rounded-full blur-3xl" />
+              <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 lg:w-96 lg:h-96 bg-primary-cyan/3 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 lg:w-96 lg:h-96 bg-success-green/3 rounded-full blur-3xl" />
               
-              <div className="relative z-10 p-4 sm:p-6 lg:p-8 xl:p-12">
-                <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 sm:gap-6 lg:gap-8">
+              <div className="relative z-10 p-3 sm:p-4 md:p-6 lg:p-8 xl:p-12">
+                <div className="flex flex-col sm:flex-row lg:flex-row items-center sm:items-start lg:items-start gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                   
                   {/* Premium Icon with animations - Responsive sizes */}
                   <div className="relative group/icon flex-shrink-0">
-                    <div className="w-16 h-16 sm:w-18 sm:h-18 lg:w-20 lg:h-20 bg-gradient-premium rounded-xl lg:rounded-2xl flex items-center justify-center relative overflow-hidden group-hover/icon:rotate-3 transition-transform duration-300">
-                      <ChartBarIcon className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 text-white relative z-10" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-20 lg:h-20 bg-gradient-premium rounded-lg sm:rounded-xl lg:rounded-2xl flex items-center justify-center relative overflow-hidden group-hover/icon:rotate-3 transition-transform duration-300">
+                      <ChartBarIcon className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 lg:w-10 lg:h-10 text-white relative z-10" />
                       
                       {/* Pulse ring animation */}
-                      <div className="absolute inset-0 rounded-xl lg:rounded-2xl bg-gradient-premium opacity-75" />
+                      <div className="absolute inset-0 rounded-lg sm:rounded-xl lg:rounded-2xl bg-gradient-premium opacity-75" />
                       
                       {/* Shimmer effect */}
-                      <div className="absolute inset-0 rounded-xl lg:rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
+                      <div className="absolute inset-0 rounded-lg sm:rounded-xl lg:rounded-2xl bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
                     </div>
                     
                     {/* Glow effect */}
-                    <div className="absolute inset-0 rounded-xl lg:rounded-2xl bg-gradient-premium blur-xl opacity-50" />
+                    <div className="absolute inset-0 rounded-lg sm:rounded-xl lg:rounded-2xl bg-gradient-premium blur-xl opacity-50" />
                   </div>
                   
                   {/* Content - Enhanced responsive typography */}
-                  <div className="flex-1 text-center lg:text-left min-w-0">
-                    <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-text-primary mb-2 sm:mb-3 lg:mb-4">
+                  <div className="flex-1 text-center sm:text-left lg:text-left min-w-0">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-text-primary mb-2 sm:mb-3 lg:mb-4">
                       Dashboard Executivo
                     </h1>
-                    <p className="text-sm sm:text-base lg:text-lg text-text-secondary mb-4 sm:mb-5 lg:mb-6 max-w-2xl mx-auto lg:mx-0">
+                    <p className="text-xs sm:text-sm md:text-base lg:text-lg text-text-secondary mb-3 sm:mb-4 md:mb-5 lg:mb-6 max-w-2xl mx-auto sm:mx-0 lg:mx-0 px-2 sm:px-0">
                       Visão completa do desempenho de vendas, leads e métricas estratégicas em tempo real
                     </p>
                     
                     {/* Quick metrics in hero - Enhanced responsive layout */}
-                    <div className="flex flex-wrap gap-3 sm:gap-4 lg:gap-6 justify-center lg:justify-start">
-                      <div className="text-center min-w-0">
-                        <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gradient-cyan truncate">{leadsKpis.today}</div>
+                    <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 lg:gap-6 justify-center sm:justify-start lg:justify-start">
+                      <div className="text-center min-w-0 flex-1 sm:flex-none">
+                        <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gradient-cyan truncate">{leadsKpis.today}</div>
                         <div className="text-xs sm:text-sm text-text-tertiary">Leads Hoje</div>
                       </div>
-                      <div className="text-center min-w-0">
-                        <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gradient-green truncate">{formatBRL(vendasKpis.todayTotal)}</div>
+                      <div className="text-center min-w-0 flex-1 sm:flex-none">
+                        <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gradient-green truncate">{formatBRL(vendasKpis.todayTotal)}</div>
                         <div className="text-xs sm:text-sm text-text-tertiary">Vendas Hoje</div>
                       </div>
-                      <div className="text-center min-w-0">
-                        <div className="text-lg sm:text-xl lg:text-2xl font-bold text-gradient-purple">+12.5%</div>
+                      <div className="text-center min-w-0 flex-1 sm:flex-none">
+                        <div className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold text-gradient-purple">+12.5%</div>
                         <div className="text-xs sm:text-sm text-text-tertiary">Crescimento</div>
                       </div>
                     </div>
@@ -260,39 +267,29 @@ export default function Dashboard() {
 
             {/* Atendidos por Setor - Enhanced Responsive */}
             <div className={`
-              glass rounded-xl p-4 sm:p-6 lg:p-8 border border-cyan-400/20 mb-6 lg:mb-8 transition-all duration-700 ease-out
+              mb-8 sm:mb-10 lg:mb-12 transition-all duration-700 ease-out delay-200
               ${animationStage >= 2 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
             `}>
-              <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-4 lg:mb-6">Atendidos por Setor</h2>
-              <SimpleBarChart items={attendedSectorData} />
+              <h2 className="text-2xl sm:text-3xl font-bold text-text-primary mb-6 sm:mb-8 text-center lg:text-left px-4 sm:px-0">
+                Atendidos por Setor
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
+                 <Chart data={leadsChartData} title="Leads por Dia" type="leads" />
+                 <Chart data={salesChartData} title="Vendas por Dia" type="sales" />
+               </div>
             </div>
 
-            {/* Novos Leads - Enhanced Responsive Grid */}
+            {/* Novos Leads - Enhanced Responsive */}
             <div className={`
-              glass rounded-xl p-4 sm:p-6 lg:p-8 border border-cyan-400/20 mb-6 lg:mb-8 transition-all duration-700 ease-out
-              ${animationStage >= 2 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
+              transition-all duration-700 ease-out delay-300
+              ${animationStage >= 3 ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
             `}>
-              <h2 className="text-xl sm:text-2xl font-bold text-text-primary mb-4 lg:mb-6">Novos Leads</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-text-primary mb-6 sm:mb-8 text-center lg:text-left px-4 sm:px-0">
+                Novos Leads
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
                 {leadsMetrics.map((metric, index) => (
-                  <div
-                    key={index}
-                    className="transition-all duration-500 ease-out"
-                    style={{ 
-                      transitionDelay: animationStage >= 2 ? `${index * 100}ms` : '0ms',
-                      transform: animationStage >= 2 ? 'translateY(0)' : 'translateY(20px)',
-                      opacity: animationStage >= 2 ? 1 : 0
-                    }}
-                  >
-                    <DashboardCard
-                      title={metric.title}
-                      value={metric.value}
-                      change={metric.change}
-                      changeType={metric.changeType}
-                      icon={metric.icon}
-                      period={metric.period}
-                    />
-                  </div>
+                  <DashboardCard key={`${metric.title}-${metric.period}`} {...metric} />
                 ))}
               </div>
             </div>
@@ -355,7 +352,7 @@ export default function Dashboard() {
               </div>
               
               {/* Mobile-first responsive table */}
-              <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <div className="overflow-x-auto">
                 <div className="min-w-full inline-block align-middle">
                   <table className="w-full min-w-[700px]">
                     <thead>

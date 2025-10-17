@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { ChartBarIcon, UserIcon, UserGroupIcon } from '@heroicons/react/24/outline'
+import { ChartBarIcon, UserIcon, UserGroupIcon, XMarkIcon } from '@heroicons/react/24/outline'
 
 // Ícone personalizado para Valéria (mulher)
 const WomanIcon = ({ className }: { className?: string }) => (
@@ -20,7 +20,12 @@ const ManIcon = ({ className }: { className?: string }) => (
   </svg>
 )
 
-export default function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean
+  onClose?: () => void
+}
+
+export default function Sidebar({ isOpen = true, onClose }: SidebarProps) {
   const pathname = usePathname()
   const [isVisible, setIsVisible] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<number | null>(null)
@@ -36,11 +41,38 @@ export default function Sidebar() {
   }, [])
 
   return (
-    <aside className="sidebar-premium min-h-screen flex flex-col py-4 sm:py-6 group relative overflow-hidden">
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-primary-cyan/5 via-transparent to-success-green/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+    <>
+      {/* Mobile overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300"
+          onClick={onClose}
+        />
+      )}
       
-      <nav className="w-full flex-1 relative z-10">
+      {/* Sidebar */}
+      <aside className={`
+        sidebar-premium h-screen w-64 flex flex-col py-4 sm:py-6 group overflow-hidden z-50
+        fixed top-0 left-0
+        overflow-y-auto
+        transform transition-transform duration-300 ease-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        {/* Animated background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary-cyan/5 via-transparent to-success-green/5" />
+        
+        {/* Mobile close button */}
+        <div className="lg:hidden flex justify-end p-4 relative z-20">
+          <button
+            onClick={onClose}
+            className="p-2 rounded-lg bg-surface-elevated/50 backdrop-blur-sm border border-border-subtle hover:bg-surface-hover hover:border-primary-cyan/30 transition-all duration-200 group"
+            aria-label="Fechar menu"
+          >
+            <XMarkIcon className="w-5 h-5 text-text-primary group-hover:text-primary-cyan transition-colors" />
+          </button>
+        </div>
+        
+        <nav className="w-full flex-1 relative z-10 px-2 lg:px-0">
         <ul className="flex flex-col space-y-1 sm:space-y-2">
           {menuItems.map((item, index) => {
             const Icon = item.icon
@@ -62,8 +94,7 @@ export default function Sidebar() {
                 <div 
                   className={`
                     absolute inset-0 mx-1 sm:mx-2 rounded-xl bg-gradient-to-r from-primary-cyan/10 to-success-green/10 
-                    opacity-0 transition-all duration-300 scale-95
-                    ${hoveredItem === index ? 'opacity-100 scale-100' : ''}
+                    opacity-100
                   `}
                 />
                 
@@ -73,48 +104,43 @@ export default function Sidebar() {
                   onMouseEnter={() => setHoveredItem(index)}
                   onMouseLeave={() => setHoveredItem(null)}
                   className={`
-                    w-full flex items-center px-3 sm:px-4 py-2.5 sm:py-3 mx-1 sm:mx-2 rounded-xl transition-all duration-300 relative z-10
-                    transform hover:scale-105 hover:translate-x-1
+                    w-full flex items-center px-3 sm:px-4 py-2.5 sm:py-3 mx-1 sm:mx-2 rounded-xl transition-colors duration-300 relative z-10
                     ${item.active 
                       ? 'bg-surface-hover text-primary-cyan shadow-glow-cyan' 
                       : 'text-text-tertiary hover:text-text-primary hover:bg-surface-hover'
                     }
-                    group-hover:mx-2 sm:group-hover:mx-3
                   `}
+                  onClick={() => {
+                    // Fechar menu mobile ao clicar em um item
+                    if (onClose && window.innerWidth < 1024) {
+                      onClose()
+                    }
+                  }}
                 >
                   <div className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 relative">
                     <Icon className={`
                       w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 
                       ${item.active ? 'text-primary-cyan' : 'text-current'}
-                      ${hoveredItem === index ? 'scale-110 rotate-3' : ''}
                     `} />
                     
                     {/* Enhanced glow effect */}
-                    {(item.active || hoveredItem === index) && (
+                    {item.active && (
                       <div className="absolute inset-0 w-4 h-4 sm:w-5 sm:h-5 bg-primary-cyan opacity-20 blur-sm rounded-full" />
                     )}
                     
                     {/* Shimmer effect on hover */}
-                    {hoveredItem === index && (
-                      <div className="absolute inset-0 w-4 h-4 sm:w-5 sm:h-5 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer rounded-full" />
-                    )}
+
                   </div>
                   
                   <span className={`
-                    menu-label text-xs sm:text-sm font-medium transition-all duration-300
+                    menu-label text-xs sm:text-sm font-medium transition-colors duration-300
                     ${item.active ? 'text-primary-cyan' : 'text-current'}
-                    ${hoveredItem === index ? 'translate-x-1' : ''}
-                  `}>
+                 `}>
                     {item.name}
                   </span>
                   
                   {/* Subtle arrow indicator on hover */}
-                  <div className={`
-                    ml-auto opacity-0 transition-all duration-300 text-primary-cyan text-xs sm:text-sm
-                    ${hoveredItem === index ? 'opacity-100 translate-x-0' : 'translate-x-2'}
-                  `}>
-                    →
-                  </div>
+                  <div className="ml-auto text-primary-cyan text-xs sm:text-sm opacity-0">→</div>
                 </Link>
               </li>
             )
@@ -127,26 +153,22 @@ export default function Sidebar() {
         px-3 sm:px-4 py-2 sm:py-3 border-t border-border-subtle relative z-10 transition-all duration-700 ease-out
         ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}
       `} style={{ transitionDelay: '400ms' }}>
-        <div className="flex items-center justify-center group-hover:justify-start transition-all duration-300 group cursor-pointer">
+        <div className="flex items-center justify-center transition-all duration-300 cursor-pointer">
           <div className="relative">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-premium flex items-center justify-center relative overflow-hidden group-hover:rotate-6 transition-transform duration-300">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-premium flex items-center justify-center relative overflow-hidden">
               <span className="text-xs font-bold text-white relative z-10">CI</span>
-              
-              {/* Shimmer effect on hover */}
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-shimmer transition-opacity duration-300" />
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0" />
             </div>
-            
-            {/* Pulse ring on hover */}
-            <div className="absolute inset-0 rounded-lg bg-gradient-premium opacity-0 group-hover:opacity-50 group-hover:animate-pulse-ring transition-opacity duration-300" />
+            <div className="absolute inset-0 rounded-lg bg-gradient-premium opacity-0" />
           </div>
-          
-          <div className="menu-label ml-2 sm:ml-3 group-hover:translate-x-1 transition-transform duration-300">
-            <div className="text-xs font-semibold text-text-primary group-hover:text-primary-cyan transition-colors duration-300">Canastra</div>
-            <div className="text-xs text-text-tertiary group-hover:text-text-secondary transition-colors duration-300 hidden sm:block">Intelligence</div>
-            <div className="text-xs text-text-tertiary group-hover:text-text-secondary transition-colors duration-300 sm:hidden">AI</div>
+          <div className="menu-label ml-2 sm:ml-3">
+            <div className="text-xs font-semibold text-text-primary">Canastra</div>
+            <div className="text-xs text-text-tertiary hidden sm:block">Intelligence</div>
+            <div className="text-xs text-text-tertiary sm:hidden">AI</div>
           </div>
         </div>
       </div>
     </aside>
+    </>
   )
 }
